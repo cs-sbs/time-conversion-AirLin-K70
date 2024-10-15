@@ -1,0 +1,56 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: TC01
+      id: tc01
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: TC01
+        setup-command: ''
+        command: bash ./calculate.sh
+        input: '933'
+        expected-output: '133'
+        comparison-method: exact
+        timeout: 10
+    - name: TC02
+      id: tc02
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: TC02
+        setup-command: ''
+        command: bash ./calculate.sh
+        input: '0023'
+        expected-output: '1623'
+        comparison-method: exact
+        timeout: 10
+    - name: TC03
+      id: tc03
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: TC03
+        setup-command: ''
+        command: bash ./calculate.sh
+        input: '1'
+        expected-output: '1601'
+        comparison-method: exact
+        timeout: 10
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TC01_RESULTS: "${{steps.tc01.outputs.result}}"
+        TC02_RESULTS: "${{steps.tc02.outputs.result}}"
+        TC03_RESULTS: "${{steps.tc03.outputs.result}}"
+      with:
+        runners: tc01,tc02,tc03
