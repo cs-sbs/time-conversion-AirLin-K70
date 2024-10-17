@@ -18,5 +18,5 @@ if [ -f "$CLASS_PATH" ]; then
         echo "编译失败，请检查Java代码。"
     fi
 else
-    echo "Java文件不存在，请确保文件名和路径正确。"
+    echo "Java文件不存在，请确保文件名和路径正确。 CLASS_PATH: $CLASS_PATH"
 fi
